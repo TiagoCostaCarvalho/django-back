@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))  # Explicitly load .env
 
+# Static & Media Files (if applicable)
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 DEBUG = os.getenv('DEBUG') == 'True'
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +33,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["tiago-team-trck-api.onrender.com", "127.0.0.1"]
 
 
 # Application definition

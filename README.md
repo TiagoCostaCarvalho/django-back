@@ -16,7 +16,7 @@ git clone https://github.com/your-username/hr-django-backend.git
 cd hr-django-backend
 python -m venv venv
 venv\Scripts\activate  # Windows
-pip install django djangorestframework mysqlclient python-dotenv
+pip install -r requirements.txt
 ```
 
 ### Configure the Database (.env File)
