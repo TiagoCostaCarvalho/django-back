@@ -1,0 +1,34 @@
+# Virtual environment
+venv/
+.env
+
+# Django and Python cache files
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Migrations (optional: only ignore auto-generated ones)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Logs and temp files
+*.log
+*.pot
+*.pyc
+*.swp
+.DS_Store
+db.sqlite3
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Compiled Python files
+*.egg-info/
+*.egg/
+*.pyo
+
+# Static/media files (if not versioned)
+staticfiles/
+media/
