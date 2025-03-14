@@ -8,8 +8,8 @@ __pycache__/
 *.sqlite3
 
 # Migrations (optional: only ignore auto-generated ones)
-**/migrations/*.py
-!**/migrations/__init__.py
+# **/migrations/*.py
+# !**/migrations/__init__.py
 
 # Logs and temp files
 *.log

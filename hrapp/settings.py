@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ["tiago-team-trck-api.onrender.com", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,20 +91,20 @@ WSGI_APPLICATION = 'hrapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -158,3 +160,6 @@ REST_FRAMEWORK = {
     ]
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Allow requests from React frontend
+]
