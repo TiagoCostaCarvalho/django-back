@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from core.services.employee_service import find_all, find_one, create_employee, update_employee, delete_employee
+from core.services.employee_service import find_all, find_one, create_employee, update_employee, delete_employee, get_employee_hierarchy
 from core.serializers.employee_serializer import EmployeeSerializer
 
 class EmployeeListView(APIView):
@@ -38,3 +38,8 @@ class EmployeeDetailView(APIView):
         if delete_employee(employee_id):
             return Response({"message": "Employee deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"error": "Employee not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class EmployeeHierarchyView(APIView):
+    def get(self, request):
+        hierarchy = get_employee_hierarchy()
+        return Response(hierarchy, status=status.HTTP_200_OK)

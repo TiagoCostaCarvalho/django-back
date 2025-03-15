@@ -3,7 +3,7 @@ from core.views.basic_view import ping
 from django.urls import path
 from core.views.role_view import RoleListView, RoleDetailView
 from core.views.course_view import CourseListView, CourseDetailView, CourseSearchView
-from core.views.employee_view import EmployeeListView, EmployeeDetailView
+from core.views.employee_view import EmployeeListView, EmployeeDetailView, EmployeeHierarchyView
 
 urlpatterns = [
     path('ping/', ping, name='ping'),  # Exposes /ping
@@ -14,4 +14,5 @@ urlpatterns = [
     path('employees/', EmployeeListView.as_view(), name='employee-list'),
     path('employees/<int:employee_id>/', EmployeeDetailView.as_view(), name='employee-detail'),
     path('courses/search/', CourseSearchView.as_view(), name='course-search'),
+    path('employees/hierarchy/', EmployeeHierarchyView.as_view(), name='employee-hierarchy'),
 ]

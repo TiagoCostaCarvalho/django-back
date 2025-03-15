@@ -70,3 +70,17 @@ def delete_employee(employee_id):
         return True
     except ObjectDoesNotExist:
         return False
+
+def get_employee_hierarchy():
+    def build_hierarchy(employee):
+        return {
+            "id": employee.id,
+            "first_name": employee.first_name,
+            "last_name": employee.last_name,
+            "date_of_birth": employee.date_of_birth,
+            "role": employee.role.id,
+            "reporter_employees": [build_hierarchy(e) for e in employee.subordinates.all()]
+        }
+    
+    top_level_employees = Employee.objects.filter(manager__isnull=True)
+    return [build_hierarchy(emp) for emp in top_level_employees]
