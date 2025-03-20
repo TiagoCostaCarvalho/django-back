@@ -43,9 +43,18 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
         # Check if the manager's role is valid in the role_hierarchy (manager must report to the employee's role)
         if manager:
+            # Check if they are not trying to set themselves as manager
+            if manager and self.instance and manager.id == self.instance.id:
+                raise serializers.ValidationError("An employee cannot be their own manager.")
+
             # Check if manager's role reports to the employee's role
             if not RoleHierarchy.objects.filter(reporter_role=role, reported_role=manager.role).exists():
                 raise serializers.ValidationError(f"{manager} cannot be assigned as the manager of this employee based on the role hierarchy.")
+
+        # If someone reports to this employee, don't allow role change
+        if self.instance and "role" in data and data["role"] != self.instance.role:
+            if EmployeeReports.objects.filter(reported_employee=self.instance).exists():
+                raise serializers.ValidationError("You cannot change the role of an employee who has subordinates.")
 
         # Validate the `reported_by` field:
         # Ensure all employees in reported_by have a role that reports to the employee's role.

@@ -1,6 +1,8 @@
 from core.models import Course, Employee
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, IntegerField
+from datetime import date
+
 
 def find_all():
     return Course.objects.all()
@@ -53,16 +55,31 @@ def search_and_sort_courses(query_params):
         courses = courses.filter(Q(attendees__first_name__icontains=participant_name) | Q(attendees__last_name__icontains=participant_name))
     
     start_date = query_params.get('start_date')
+    end_date = query_params.get('end_date')
+
     if start_date:
         courses = courses.filter(start_date__gte=start_date)
-    
-    end_date = query_params.get('end_date')
     if end_date:
         courses = courses.filter(end_date__lte=end_date)
+
+    # Sorting Logic
+    today = date.today()
     
-    # Sorting
-    sort_by = query_params.get('sort_by', 'start_date')
-    if sort_by.lstrip('-') in ['title', 'start_date', 'end_date']:
-        courses = courses.order_by(sort_by)
-    
+    # Determine if user requested sorting
+    user_sort_by = query_params.get('sort_by')
+    if user_sort_by and user_sort_by.lstrip('-') in ['title', 'start_date', 'end_date']:
+        # Apply user-specified sorting instead of default
+        courses = courses.order_by(user_sort_by)
+    else:
+        # Default sorting (if no custom sorting applied)
+        courses = courses.annotate(
+            sorting_order=Case(
+                When(start_date__lte=today, end_date__gte=today, then=Value(1)),  # Ongoing courses
+                When(start_date__gt=today, then=Value(2)),  # Upcoming courses
+                When(end_date__lt=today, then=Value(3)),  # Past courses
+                default=Value(4),
+                output_field=IntegerField(),
+            )
+        ).order_by('sorting_order', 'start_date', '-end_date')
+
     return courses

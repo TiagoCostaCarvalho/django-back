@@ -33,3 +33,11 @@ class CourseSerializer(serializers.ModelSerializer):
         instance.attendees.set(attendees_data)  # Reassign the attendees using the set() method
         instance.save()
         return instance
+
+    def validate(self, data):
+        attendees = data.get("attendees")
+
+        if len(attendees) > 5:
+            raise serializers.ValidationError("A course should not have more than 5 attendees.")
+
+        return data
